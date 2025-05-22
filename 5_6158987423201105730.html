@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login | 𝐓ɪᴏɴ 𝐒𝟑 𝐖ᴇʙꜱɪᴛᴇ</title>
+  <script src="https://cdn.jsdelivr.net/npm/tsparticles@3/tsparticles.bundle.min.js"></script>
+  <style>
+    :root {
+      --blue: #58a6ff;
+      --cyan: #00ffff;
+      --pink: #ff6ec4;
+      --gold: #ffd700;
+      --green: #2ea043;
+      --red: #d64545;
+      --dark-bg: #0a0e14;
+      --neon-blue: #00f0ff;
+      --neon-purple: #d55fff;
+      --neon-green: #3aff95;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+      font-family: "Segoe UI", Tahoma, Verdana, sans-serif;
+      background: var(--dark-bg);
+      color: #e6edf3;
+      overflow: hidden;
+      position: relative;
+      user-select: none;
+    }
+
+    /* Grid background */
+    #grid-lines {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      background:
+        linear-gradient(rgba(0, 255, 255, 0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 0, 255, 0.07) 1px, transparent 1px);
+      background-size: 60px 60px;
+      animation: gridShift 30s linear infinite;
+      filter: drop-shadow(0 0 2px var(--neon-blue));
+    }
+    @keyframes gridShift {
+      0% { background-position: 0 0, 0 0; }
+      100% { background-position: 60px 60px, 60px 60px; }
+    }
+
+    /* Neon vertical lines */
+    .neon-line {
+      position: fixed;
+      top: 0;
+      width: 2px;
+      height: 100%;
+      background: linear-gradient(180deg, transparent, var(--neon-purple), transparent);
+      filter: drop-shadow(0 0 6px var(--neon-purple));
+      animation: neonMove 8s linear infinite;
+      opacity: 0.4;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .neon-line:nth-child(1) { left: 20%; animation-delay: 0s; height: 100%; }
+    .neon-line:nth-child(2) { left: 50%; animation-delay: 3s; height: 120%; }
+    .neon-line:nth-child(3) { left: 80%; animation-delay: 5s; height: 90%; }
+    @keyframes neonMove {
+      0% { transform: translateY(-100%); opacity: 0.1; }
+      50% { opacity: 0.7; }
+      100% { transform: translateY(100%); opacity: 0.1; }
+    }
+
+    /* Login Box */
+    .login-box {
+      position: relative;
+      z-index: 10;
+      background: rgba(10, 14, 20, 0.85);
+      border: 2px solid var(--neon-blue);
+      box-shadow: 0 0 15px var(--neon-blue);
+      padding: 35px 30px;
+      border-radius: 18px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      margin: auto;
+      top: 50%;
+      transform: translateY(-50%);
+      backdrop-filter: blur(8px);
+    }
+
+    .login-box h1 {
+      font-weight: 900;
+      font-size: 2rem;
+      background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple), var(--neon-green));
+      background-size: 300% 300%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shift 12s ease infinite;
+      margin-bottom: 25px;
+    }
+    @keyframes shift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    input {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 12px;
+      border: none;
+      margin-bottom: 20px;
+      background: #0d1117;
+      color: #d0f0ff;
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      box-shadow: inset 0 0 10px rgba(0, 255, 255, 0.3);
+      transition: box-shadow 0.3s ease;
+    }
+    input:focus {
+      outline: none;
+      box-shadow: 0 0 15px var(--neon-blue);
+      background: #121827;
+      color: white;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      border-radius: 12px;
+      border: none;
+      background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple), var(--neon-green));
+      color: white;
+      font-weight: 700;
+      font-size: 1.1rem;
+      cursor: pointer;
+      box-shadow: 0 0 15px var(--neon-purple);
+      transition: 0.35s ease;
+      letter-spacing: 0.05em;
+    }
+    button:hover {
+      background: linear-gradient(45deg, var(--neon-green), var(--neon-blue), var(--neon-purple));
+      box-shadow: 0 0 30px var(--neon-green);
+      transform: scale(1.05);
+    }
+
+    .error-msg {
+      color: var(--red);
+      margin-top: 12px;
+      font-weight: 600;
+      display: none;
+      text-shadow: 0 0 4px var(--red);
+    }
+
+    .bottom-text {
+      margin-top: 20px;
+      font-size: 0.9rem;
+      color: #9fdfff;
+      letter-spacing: 0.05em;
+    }
+    .bottom-text a {
+      color: var(--cyan);
+      font-weight: 700;
+      text-decoration: none;
+      text-shadow: 0 0 3px var(--cyan);
+    }
+
+    .footer {
+      position: fixed;
+      bottom: 12px;
+      width: 100%;
+      text-align: center;
+      font-size: 0.8rem;
+      z-index: 10;
+      background: linear-gradient(90deg, var(--neon-blue), var(--cyan), var(--neon-purple), var(--neon-green));
+      background-size: 400% 400%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shift 15s ease infinite;
+      user-select: none;
+    }
+
+    /* tsParticles container */
+    #tsparticles {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+      background: transparent;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="grid-lines"></div>
+
+  <div class="neon-line"></div>
+  <div class="neon-line"></div>
+  <div class="neon-line"></div>
+
+  <div id="tsparticles"></div>
+
+  <div class="login-box">
+    <h1>𝐓ɪᴏɴ 𝐒𝟑 𝐖ᴇʙꜱɪᴛᴇ</h1>
+    <input type="text" id="keyInput" placeholder="@TITANKEY" autocomplete="off" />
+    <button onclick="validateKey()">LOGIN</button>
+    <div class="error-msg" id="errorMsg">Please check key or contact owner to get key</div>
+    <div class="bottom-text">
+      Buy premium access key: <a href="https://t.me/titan_mod" target="_blank" rel="noopener noreferrer">Get Key</a>
+    </div>
+  </div>
+
+  <div class="footer">𝖬𝖠𝖣𝖤 𝖡𝖸 TEAM VAMC</div>
+
+  <script>
+    // Particles config for subtle encrypted vibe
+    tsParticles.load("tsparticles", {
+      fpsLimit: 60,
+      background: { color: "transparent" },
+      particles: {
+        number: { value: 80, density: { enable: true, area: 800 } },
+        color: { value: ["#00ffff", "#d55fff", "#3aff95"] },
+        shape: { type: "circle" },
+        opacity: { value: 0.3, random: true },
+        size: { value: 3, random: { enable: true, minimumValue: 1 } },
+        move: {
+          enable: true,
+          speed: 1,
+          direction: "none",
+          random: true,
+          straight: false,
+          outModes: { default: "out" }
+        },
+        links: {
+          enable: true,
+          distance: 150,
+          color: "#00ffff",
+          opacity: 0.1,
+          width: 1
+        }
+      },
+      interactivity: {
+        events: {
+          onHover: { enable: true, mode: "repulse" },
+          onClick: { enable: true, mode: "push" }
+        },
+        modes: {
+          repulse: { distance: 100, duration: 0.4 },
+          push: { quantity: 4 }
+        }
+      },
+      detectRetina: true
+    });
+
+    // Validation and redirect logic
+    function validateKey() {
+      const key = document.getElementById("keyInput").value.trim();
+      const errorMsg = document.getElementById("errorMsg");
+      
+      // Simple validation (replace with actual Firebase or server-side logic)
+      if (key.length < 8) {
+        errorMsg.style.display = "block";
+      } else {
+        errorMsg.style.display = "none";
+        window.location.href = "http://titanweb.netlify.app/";
+      }
+    }
+  </script>
+</body>
+</html>
